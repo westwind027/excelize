@@ -52,6 +52,13 @@ func (f *File) GetCellValue(sheet, axis string) string {
 				xlsxSI := 0
 				xlsxSI, _ = strconv.Atoi(r.V)
 				xml.Unmarshal([]byte(f.readXML("xl/sharedStrings.xml")), &shardStrings)
+				if len(shardStrings.SI[xlsxSI].R) > 0 {
+					value := ""
+					for _, v := range shardStrings.SI[xlsxSI].R {
+						value += v.T
+					}
+					return value 
+				}
 				return f.formattedValue(r.S, shardStrings.SI[xlsxSI].T)
 			case "str":
 				return f.formattedValue(r.S, r.V)
